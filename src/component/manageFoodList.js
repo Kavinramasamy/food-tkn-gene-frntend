@@ -1,3 +1,4 @@
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -16,7 +17,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const FoodmenuPage = () => {
+const ManageFoodList = () => {
   const [data, setData] = useState([]);
   const getData = async () => {
     try {
@@ -39,9 +40,17 @@ const FoodmenuPage = () => {
     localStorage["food-values"] = JSON.stringify(ele);
     navTo("/editfood");
   };
-  const orderFunction = (ele) => {
-    localStorage["food-order-values"] = JSON.stringify(ele);
-    navTo("/orderfood");
+  const deleteFunction = async (id) => {
+    try {
+      await axios
+        .delete(`https://new-project-0xul.onrender.com/food${id}`)
+        .then((res) => {
+          navTo("/foodmenu");
+        })
+        .catch((err) => console.log(err));
+    } catch (error) {
+      console.log("error", error);
+    }
   };
   return (
     <Flex width={"100%"} justifyContent={"center"}>
@@ -103,20 +112,23 @@ const FoodmenuPage = () => {
                 <CardFooter>
                   <Flex w={"100%"} justifyContent={"space-evenly"}>
                     <Button
-                      variant="solid"
-                      bg={"pink"}
-                      onClick={() => orderFunction(ele)}
-                      w={"70%"}
-                    >
-                      order now
-                    </Button>
-                    {/* <Button
+                      color={"white"}
                       variant="solid"
                       bg={"cyan.400"}
+                      w={"40%"}
                       onClick={() => editFunction(ele)}
                     >
-                      Edit
-                    </Button> */}
+                      Edit <EditIcon />
+                    </Button>
+                    <Button
+                      color={"white"}
+                      variant="solid"
+                      bg={"pink.600"}
+                      onClick={() => deleteFunction(ele._id)}
+                      w={"40%"}
+                    >
+                      Delete <DeleteIcon />
+                    </Button>
                   </Flex>
                 </CardFooter>
               </Card>
@@ -127,4 +139,4 @@ const FoodmenuPage = () => {
   );
 };
 
-export default FoodmenuPage;
+export default ManageFoodList;

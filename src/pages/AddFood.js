@@ -17,11 +17,11 @@ import { toast } from "react-toastify";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 
-const EditFoods = () => {
-  const { _id, food_name, price, image_url, veg, cooking_time, cuisine } =
-    JSON.parse(localStorage["food-values"]);
+const AddFood = () => {
   const navTo = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [credential, setCredential] = useState("");
+  let [actors_name_List, setActorsList] = useState([]);
 
   const fieldValidationSchema = yup.object({
     food_name: yup.string().required(),
@@ -30,70 +30,52 @@ const EditFoods = () => {
     cooking_time: yup.string().required(),
     cuisine: yup.string().required(),
     image_url: yup.string().required(),
-    _id: yup.string().required(),
   });
   const { handleChange, handleSubmit, errors, values } = useFormik({
     initialValues: {
-      food_name: food_name,
-      veg: veg,
-      price: price,
-      cooking_time: cooking_time,
-      cuisine: cuisine,
-      image_url: image_url,
-      _id: _id,
+      food_name: "",
+      veg: true,
+      price: "",
+      cooking_time: "",
+      cuisine: "",
+      image_url: "",
     },
     validationSchema: fieldValidationSchema,
     onSubmit: async (foodInfo) => {
       try {
-        console.log(foodInfo);
-        setLoading(true);
-        foodInfo.veg = foodInfo.veg === "true" ? true : false;
         await axios
-          .put("https://new-project-0xul.onrender.com/food", foodInfo)
-          .then((res) => {
-            setLoading(false);
-            navTo("/foodmenu");
-            console.log(res);
-          })
-
-          .catch((err) => {
-            setLoading(false);
-            console.log(err);
-          });
+          .post(
+            "https://food-token-generator-backend-delta.vercel.app/food",
+            foodInfo
+          )
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err));
       } catch (error) {
-        setLoading(false);
         console.log("Error", error);
       }
     },
   });
   return (
     <Flex
-      className="text-dark"
+      className="text-white"
       minH={"100vh"}
       align={"center"}
       justify={"center"}
-      bg={"white"}
+      bg={"black"}
     >
       <Stack
         textAlign={"center"}
-        spacing={50}
+        spacing={8}
         mx={"auto"}
         maxW={"lg"}
-        w={"100%"}
-        py={10}
-        px={10}
+        py={6}
+        px={6}
         rounded={"lg"}
       >
-        <Box
-          rounded={"lg"}
-          border={"1px solid gray"}
-          borderRadius={"15px"}
-          boxShadow={"lg"}
-          p={5}
-        >
+        <Box rounded={"lg"} border={"2px solid gray"} boxShadow={"lg"} p={8}>
           <Stack align={"center"}>
             <Heading fontSize={"4xl"} textAlign={"center"}>
-              Edit Food
+              Add Food
             </Heading>
           </Stack>
           <Stack spacing={4}>
@@ -104,12 +86,11 @@ const EditFoods = () => {
                 placeholder="Select option"
                 borderColor={errors.veg ? "red.500" : "gray"}
                 onChange={handleChange}
-                icon={false}
               >
-                <option className="bg-white" value={true}>
+                <option className="bg-dark" value={true}>
                   Veg
                 </option>
-                <option className="bg-white" value={false}>
+                <option className="bg-dark" value={false}>
                   Non-Veg
                 </option>
               </Select>
@@ -132,7 +113,7 @@ const EditFoods = () => {
               <Input
                 type="number"
                 id="price"
-                p={2}
+                p={1}
                 onChange={handleChange}
                 borderColor={errors.price ? "red.500" : "gray"}
                 placeholder={errors.price ? "required" : "Enter price"}
@@ -145,7 +126,7 @@ const EditFoods = () => {
                 type="text"
                 id="cuisine"
                 multiple
-                p={2}
+                p={1}
                 onChange={handleChange}
                 borderColor={errors.cuisine ? "red.500" : "gray"}
                 placeholder={errors.cuisine ? "required" : "Enter cuisine"}
@@ -158,7 +139,7 @@ const EditFoods = () => {
                 type="text"
                 id="cooking_time"
                 multiple
-                p={2}
+                p={1}
                 onChange={handleChange}
                 borderColor={errors.cooking_time ? "red.500" : "gray"}
                 placeholder={
@@ -173,7 +154,7 @@ const EditFoods = () => {
                 type="text"
                 id="image_url"
                 multiple
-                p={2}
+                p={1}
                 onChange={handleChange}
                 borderColor={errors.image_url ? "red.500" : "gray"}
                 placeholder={errors.image_url ? "required" : "Enter image url"}
@@ -181,28 +162,20 @@ const EditFoods = () => {
               />
             </FormControl>
 
+            <Box color={"red.300"}>{credential}</Box>
             <Stack pt={2}>
-              {!loading && (
-                <Button
-                  onClick={handleSubmit}
-                  size="lg"
-                  bg={"yellow"}
-                  color={"dark"}
-                >
-                  Update
-                </Button>
-              )}
-              {loading && (
-                <Button
-                  isLoading={true}
-                  onClick={handleSubmit}
-                  size="lg"
-                  bg={"yellow"}
-                  color={"dark"}
-                >
-                  Update
-                </Button>
-              )}
+              <Button
+                isLoading={loading}
+                onClick={handleSubmit}
+                size="lg"
+                bg={"yellow.500"}
+                color={"white"}
+                _hover={{
+                  bg: "black",
+                }}
+              >
+                Add
+              </Button>
             </Stack>
           </Stack>
         </Box>
@@ -210,4 +183,4 @@ const EditFoods = () => {
     </Flex>
   );
 };
-export default EditFoods;
+export default AddFood;
