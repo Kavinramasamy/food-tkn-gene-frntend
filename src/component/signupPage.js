@@ -128,11 +128,11 @@ const SignUpPage = () => {
             <div className="text-center">
                 <span className="text-danger">{signup_response}</span>
                 <br />
-                <NavLink className="mb-3" to="/forgetpassword">
+                <NavLink className="mb-3 text-white" to="/forgetpassword">
                     Forget Password
                 </NavLink>
                 <br />
-                <NavLink className="mb-3" to="/login">
+                <NavLink className="mb-3 text-white" to="/login">
                     LogIn
                 </NavLink>
             </div>

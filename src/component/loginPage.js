@@ -99,11 +99,11 @@ const LoginPage = () => {
                 </div>
             </form>
             <div className=" text-center">
-                <NavLink className="mb-3" to="/forgetpassword">
+                <NavLink className="mb-3 text-white" to="/forgetpassword">
                     Forget Password
                 </NavLink>
                 <br />
-                <NavLink className="mb-3" to="/signup">
+                <NavLink className="mb-3 text-white" to="/signup">
                     SignUp
                 </NavLink>
             </div>
