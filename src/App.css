@@ -1,0 +1,17 @@
+App {
+  text-align: center;
+}
+
+.moving-text {
+  color: cadetblue;
+  font-size: 40px;
+}
+
+.homepagetext {
+  background-color: black;
+  height: 100vh;
+}
+
+Select::placeholder {
+  color: black;
+}
