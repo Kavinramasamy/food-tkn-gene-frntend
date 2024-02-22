@@ -24,7 +24,6 @@ const FoodmenuPage = () => {
         .get("https://new-project-0xul.onrender.com/food")
         .then((res) => {
           setData(res.data.food_list);
-          console.log(res.data.food_list);
         })
         .catch((err) => console.log(err));
     } catch (error) {
@@ -50,6 +49,7 @@ const FoodmenuPage = () => {
         {data.length > 0 &&
           data.map((ele, idx) => (
             <GridItem
+              key={idx}
               colSpan={{ base: 6, md: 3, lg: 2 }}
               p={"10px"}
               borderRadius={"15px"}

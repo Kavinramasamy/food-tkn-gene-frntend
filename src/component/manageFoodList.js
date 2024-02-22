@@ -1,4 +1,4 @@
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { AddIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -25,7 +25,6 @@ const ManageFoodList = () => {
         .get("https://new-project-0xul.onrender.com/food")
         .then((res) => {
           setData(res.data.food_list);
-          console.log(res.data.food_list);
         })
         .catch((err) => console.log(err));
     } catch (error) {
@@ -53,89 +52,115 @@ const ManageFoodList = () => {
     }
   };
   return (
-    <Flex width={"100%"} justifyContent={"center"}>
-      <Grid templateColumns="repeat(6, 1fr)" p={"10px"} gap={6}>
-        {!data.length > 0 && <Heading>Loading...</Heading>}
-        {data.length > 0 &&
-          data.map((ele, idx) => (
-            <GridItem
-              colSpan={{ base: 6, md: 3, lg: 2 }}
-              p={"10px"}
-              borderRadius={"15px"}
-            >
-              <Card maxW="sm">
-                <CardBody
-                  textAlign={"center"}
-                  display={"flex"}
-                  flexDirection={"column"}
-                >
-                  <Image
-                    h={"30vh"}
-                    src={ele.image_url}
-                    alt="food"
-                    borderRadius="md"
-                  />
-                  <Stack mt="6" spacing="3">
-                    <Heading size="md">{ele.food_name}</Heading>
-                    <Text></Text>
-                    <Text
-                      fontWeight={500}
-                      color="blue.600"
-                      fontSize={{ base: "md", md: "lg" }}
-                    >
-                      Price : ₹ {ele.price}/-
-                    </Text>
-                    <Text
-                      fontWeight={500}
-                      color="blue.600"
-                      fontSize={{ base: "md", md: "lg" }}
-                    >
-                      Cooking Time : {ele.cooking_time}
-                    </Text>
-                    <Text
-                      fontWeight={500}
-                      color="blue.600"
-                      fontSize={{ base: "md", md: "lg" }}
-                    >
-                      Cuisine : {ele.cuisine}
-                    </Text>
-                    <Text
-                      fontWeight={500}
-                      color="blue.600"
-                      fontSize={{ base: "md", md: "lg" }}
-                    >
-                      Dish : {ele.veg === true ? "Veg" : "Non-Veg"}
-                    </Text>
-                  </Stack>
-                </CardBody>
-                <hr />
-                <CardFooter>
-                  <Flex w={"100%"} justifyContent={"space-evenly"}>
-                    <Button
-                      color={"white"}
-                      variant="solid"
-                      bg={"cyan.400"}
-                      w={"40%"}
-                      onClick={() => editFunction(ele)}
-                    >
-                      Edit <EditIcon />
-                    </Button>
-                    <Button
-                      color={"white"}
-                      variant="solid"
-                      bg={"pink.600"}
-                      onClick={() => deleteFunction(ele._id)}
-                      w={"40%"}
-                    >
-                      Delete <DeleteIcon />
-                    </Button>
-                  </Flex>
-                </CardFooter>
-              </Card>
-            </GridItem>
-          ))}
-      </Grid>
-    </Flex>
+    <>
+      <Flex w={"100%"} justifyContent={"space-evenly"} p={5}>
+        <Button
+          bg={"green.700"}
+          color={"white"}
+          w={"45%"}
+          onClick={() => {
+            navTo("/");
+          }}
+        >
+          Home
+        </Button>
+        <Button
+          bg={"green.500"}
+          color={"white"}
+          w={"45%"}
+          onClick={() => {
+            navTo("/addfood");
+          }}
+        >
+          <AddIcon />
+          <AddIcon visibility={"hidden"} /> Add New Food
+        </Button>
+      </Flex>
+      <Flex width={"100%"} justifyContent={"center"}>
+        <Grid templateColumns="repeat(6, 1fr)" p={"10px"} gap={6}>
+          {!data.length > 0 && <Heading>Loading...</Heading>}
+          {data.length > 0 &&
+            data.map((ele, idx) => (
+              <GridItem
+                key={idx}
+                colSpan={{ base: 6, md: 3, lg: 2 }}
+                p={"10px"}
+                borderRadius={"15px"}
+              >
+                <Card maxW="sm">
+                  <CardBody
+                    textAlign={"center"}
+                    display={"flex"}
+                    flexDirection={"column"}
+                  >
+                    <Image
+                      h={"30vh"}
+                      src={ele.image_url}
+                      alt="food"
+                      borderRadius="md"
+                    />
+                    <Stack mt="6" spacing="3">
+                      <Heading size="md">{ele.food_name}</Heading>
+                      <Text></Text>
+                      <Text
+                        fontWeight={500}
+                        color="blue.600"
+                        fontSize={{ base: "md", md: "lg" }}
+                      >
+                        Price : ₹ {ele.price}/-
+                      </Text>
+                      <Text
+                        fontWeight={500}
+                        color="blue.600"
+                        fontSize={{ base: "md", md: "lg" }}
+                      >
+                        Cooking Time : {ele.cooking_time}
+                      </Text>
+                      <Text
+                        fontWeight={500}
+                        color="blue.600"
+                        fontSize={{ base: "md", md: "lg" }}
+                      >
+                        Cuisine : {ele.cuisine}
+                      </Text>
+                      <Text
+                        fontWeight={500}
+                        color="blue.600"
+                        fontSize={{ base: "md", md: "lg" }}
+                      >
+                        Dish : {ele.veg === true ? "Veg" : "Non-Veg"}
+                      </Text>
+                    </Stack>
+                  </CardBody>
+                  <hr />
+                  <CardFooter>
+                    <Flex w={"100%"} justifyContent={"space-evenly"}>
+                      <Button
+                        color={"white"}
+                        variant="solid"
+                        bg={"cyan.400"}
+                        w={"40%"}
+                        onClick={() => editFunction(ele)}
+                      >
+                        Edit <EditIcon />
+                      </Button>
+                      <Button
+                        color={"white"}
+                        variant="solid"
+                        bg={"pink.600"}
+                        onClick={() => deleteFunction(ele._id)}
+                        w={"40%"}
+                      >
+                        Delete <DeleteIcon />
+                      </Button>
+                    </Flex>
+                  </CardFooter>
+                </Card>
+              </GridItem>
+            ))}
+        </Grid>
+      </Flex>
+    </>
   );
 };
 

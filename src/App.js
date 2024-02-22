@@ -11,6 +11,8 @@ import OrderFoods from "./component/orderPage";
 import HomePageComp from "./component/homePage";
 import ManageFoodList from "./component/manageFoodList";
 
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   return (
     <div className="App">

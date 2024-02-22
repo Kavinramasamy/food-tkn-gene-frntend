@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -41,6 +41,7 @@ const EditFoods = () => {
       cuisine: cuisine,
       image_url: image_url,
       _id: _id,
+      token: localStorage["food-gen-admin-token"],
     },
     validationSchema: fieldValidationSchema,
     onSubmit: async (foodInfo) => {
@@ -66,6 +67,11 @@ const EditFoods = () => {
       }
     },
   });
+  useEffect(() => {
+    if (!localStorage["login"]) {
+      return navTo("/login");
+    }
+  }, []);
   return (
     <Flex
       className="text-dark"

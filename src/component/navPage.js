@@ -1,8 +1,10 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
-import { Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
+import { Container, Nav, Navbar } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const NavPage = () => {
+  const navTo = useNavigate();
   return (
     <Box>
       <Navbar expand="lg" className="text-white body bg-success">
@@ -21,12 +23,12 @@ const NavPage = () => {
                 Home
               </Nav.Link>
               <Nav.Link className="text-white" href="/login">
-                Login
+                Manage Food
               </Nav.Link>
-              <Nav.Link className="text-white" href="/signup">
-                signup
+              <Nav.Link className="text-white" href="/foodmenu">
+                Food List
               </Nav.Link>
-              <NavDropdown
+              {/* <NavDropdown
                 className="text-white"
                 title="Foods"
                 id="basic-nav-dropdown"
@@ -38,7 +40,7 @@ const NavPage = () => {
                 <NavDropdown.Item href="/manage">
                   Manage Food List
                 </NavDropdown.Item>
-              </NavDropdown>
+              </NavDropdown> */}
             </Nav>
           </Navbar.Collapse>
         </Container>

@@ -1,120 +1,201 @@
+import {
+  Button,
+  Flex,
+  Heading,
+  Image,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Stack,
+} from "@chakra-ui/react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import * as yup from "yup";
 import { useFormik } from "formik";
-import { useState } from "react"
-import { NavLink, useNavigate } from "react-router-dom"
-import * as yup from 'yup';
-
+import axios from "axios";
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
-    const navTo = useNavigate();
-    const [logininfo, setLoginInfo] = useState("")
-    const fieldValidationSchema = yup.object({
-        email: yup.string().required("please enter a valid mail"),
-        password: yup.string().required("please enter a valid password")
-    });
-    const { handleSubmit, handleBlur, handleChange, values, errors, touched } = useFormik({
-        initialValues: {
-            email: "",
-            password: ""
-        },
-        ValidationSchema: fieldValidationSchema,
-        onSubmit: async (logininfo) => {
-            try {
-                setLoginInfo("please wait")
-                const response = await fetch(" ", {
-                    method: "POST",
-                    body: JSON.stringify(logininfo),
-                    headers: {
-                        "content-type": "application/json"
-                    },
-                }
-                );
-                const data = await response.json();
-                if (data.message == "login success") {
-                    localStorage.setItem("food-token-gene-token", data.token);
-                    localStorage.setItem("food-token-gene-email", data.email);
-                    navTo('/foodmenu')
-                }
-                else {
-                    setLoginInfo(data.message);
-                }
-            } catch (errors) {
-                console.log("Errors....", errors);
-            }
-        },
-    });
-    const demo = () => {
-        values.email = "demo@demo.in";
-        values.password = "Password@123";
-    };
+  const navTo = useNavigate();
 
-    return (
-        <div className="entry bg-dark " style={{ height: "100vh" }}>
-            <h1 className="text-warning text-center">LogIn Page</h1>
-            <form className="text-start p-5" onSubmit={handleSubmit}>
-                <div className="form-group text-light">
-                    <label for="exampleInputEmail1 ">Email address</label>
-                    <input
-                        type="email"
-                        className={`form-control my-2 ${touched.email && errors.email ? "border-danger border-2" : ""
-                            }`}
-                        id="email"
-                        aria-describedby="emailHelp"
-                        placeholder={`${touched.email && errors.email ? errors.email : "Enter email"
-                            }`}
-                        value={values.email}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                    />
-                </div>
-                <div className="form-group text-light">
-                    <label for="exampleInputPassword1 ">Password</label>
-                    <input
-                        type="password"
-                        className={`form-control my-2 ${touched.password && errors.password
-                            ? "border-danger border-2"
-                            : ""
-                            }`}
-                        id="password"
-                        placeholder={` ${touched.password && errors.password
-                            ? errors.password
-                            : "Enter password"
-                            }`}
-                        value={values.password}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                    />
-                </div>
-                <div className="text-center m-3">
-                    <p className="text-danger">{logininfo}</p>
-                    <br />
+  const [load, setLoad] = React.useState(false);
 
-                    <button type="submit" className="btn btn-success px-5">
-                        LogIn
-                    </button>
-                    <br />
-                    <br />
-                    <button type="submit" className="btn btn-warning px-5" onClick={demo}>
-                        Demo LogIn
-                    </button>
-                </div>
-            </form>
-            <div className=" text-center">
-                <NavLink className="mb-3 text-white" to="/forgetpassword">
-                    Forget Password
-                </NavLink>
-                <br />
-                <NavLink className="mb-3 text-white" to="/signup">
-                    SignUp
-                </NavLink>
-            </div>
-        </div>
-    );
+  const [show, setShow] = React.useState(false);
+  const handleShow = () => setShow(!show);
+
+  const fieldValidationSchema = yup.object({
+    email: yup.string().required("please enter a valid mail"),
+    password: yup.string().required("please enter a valid password"),
+  });
+  const { handleSubmit, handleChange, values } = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    ValidationSchema: fieldValidationSchema,
+    onSubmit: async (logininfo) => {
+      try {
+        setLoad(true);
+        await axios
+          .post("https://new-project-0xul.onrender.com/login", logininfo)
+          .then((res) => {
+            localStorage.setItem("food-gen-admin-token", res.data.token);
+            localStorage.setItem("login", true);
+            toast.success("Login Success");
+            navTo("/manage");
+            setLoad(false);
+          })
+          .catch((error) => {
+            console.log("hello", error);
+            toast.warning("Invalid Credential");
+            setLoad(false);
+          });
+      } catch (errors) {
+        toast.warning("Try Again");
+        console.log("Error", errors);
+      }
+    },
+  });
+  const demoLoad = () => {
+    values.email = "admin@admin.in";
+    values.password = "@123admin";
+    handleSubmit();
+  };
+  return (
+    <Flex
+      minH={"90vh"}
+      bg={"gray.100"}
+      justifyContent={"center"}
+      alignItems={"center"}
+      boxShadow={" 0 5px 8px 0 black"}
+    >
+      <Flex justifyContent={"center"} h={"500px"} w={"1000px"} borderRadius={5}>
+        <Image
+          src="https://upload.wikimedia.org/wikipedia/commons/a/a6/Foods_-_Idil_Keysan_-_Wikimedia_Giphy_stickers_2019.gif"
+          h={"100%"}
+          w={"60%"}
+          bg={"green.100"}
+          display={{ base: "none", lg: "block" }}
+          borderLeftRadius={5}
+          //   filter={"hue-rotate(4.5rad)"}
+        />
+        <Flex
+          flexDirection={"column"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          p={5}
+          textAlign={"center"}
+          borderRightRadius={5}
+          h={"100%"}
+          w={{ base: "80%", md: "50%", lg: "40%" }}
+          bg={"white"}
+        >
+          <Heading color={{ base: "green.400" }} fontWeight={{ base: "700" }}>
+            ADMIN LOGIN
+          </Heading>
+          <Stack p={4} />
+          <form className="w-100" onSubmit={handleSubmit}>
+            <Input
+              color={"green.400"}
+              fontWeight={{ base: "500" }}
+              required={true}
+              id="email"
+              name="email"
+              type="email"
+              onChange={handleChange}
+              value={values.email}
+              borderColor={"green.300"}
+              borderWidth={2}
+              placeholder="E-mail"
+              _placeholder={{ color: "green.300", fontWeight: "500" }}
+            />
+            <Stack p={2} />
+            <InputGroup size="md">
+              <Input
+                color={"green.400"}
+                fontWeight={{ base: "500" }}
+                required={true}
+                id="password"
+                name="password"
+                type={show ? "text" : "password"}
+                placeholder="Password"
+                onChange={handleChange}
+                value={values.password}
+                borderColor={"green.300"}
+                borderWidth={2}
+                _placeholder={{ color: "green.300", fontWeight: "500" }}
+              />
+              <InputRightElement width="4rem" color={"green.500"}>
+                {show ? (
+                  <ViewIcon
+                    _hover={{ cursor: "pointer" }}
+                    size="sm"
+                    onClick={handleShow}
+                  />
+                ) : (
+                  <ViewOffIcon
+                    _hover={{ cursor: "pointer" }}
+                    size="sm"
+                    onClick={handleShow}
+                  />
+                )}
+              </InputRightElement>
+            </InputGroup>
+            <Stack p={2} />
+
+            {!load && (
+              <Button
+                _hover={{ bg: "green.600" }}
+                color={"white"}
+                bg={"green.500"}
+                w={"100%"}
+                type="submit"
+              >
+                LogIn
+              </Button>
+            )}
+            {load && (
+              <Button
+                isLoading={true}
+                _hover={{ bg: "green.600" }}
+                color={"white"}
+                bg={"green.500"}
+                w={"100%"}
+                type="submit"
+              >
+                LogIn
+              </Button>
+            )}
+            <Stack p={2} />
+            {!load && (
+              <Button
+                _hover={{ bg: "green.600" }}
+                color={"white"}
+                bg={"green.500"}
+                w={"100%"}
+                onClick={demoLoad}
+              >
+                Demo Credential
+              </Button>
+            )}
+            {load && (
+              <Button
+                isLoading={true}
+                _hover={{ bg: "green.600" }}
+                color={"white"}
+                bg={"green.500"}
+                w={"100%"}
+                onClick={demoLoad}
+              >
+                Demo Credential
+              </Button>
+            )}
+          </form>
+        </Flex>
+      </Flex>
+    </Flex>
+  );
 };
 
 export default LoginPage;
-
-
-
-
-
-

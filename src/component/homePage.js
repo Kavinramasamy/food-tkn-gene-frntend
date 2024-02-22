@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Typewriter from "typewriter-effect";
 import { Box, Image } from "@chakra-ui/react";
@@ -8,6 +8,9 @@ import bg_pic2 from "./images/bg_pic2.jpg";
 import bg_pic3 from "./images/bg_pic3.jpg";
 
 const HomePageComp = () => {
+  useEffect(() => {
+    localStorage.setItem("login", false);
+  }, []);
   return (
     <div>
       <div className="homepagetext text-center p-5 ">
